@@ -1,0 +1,82 @@
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+    <title>Introduction to vue</title>
+</head>
+
+<body>
+    <div id="shopping-list">
+        <h1>
+            Hello! Newer vue {{header || 'welcome to our first app'}}
+        </h1>
+
+        <input type="text" v-model="header" placeholder="edit me">
+        <ul>
+
+            <li v-for="item in items">
+                {{item.item}} with number: {{item.id}}
+            </li>
+        </ul>
+
+        <input type="text" v-model="newItem" placeholder="add item">
+        <button v-on:click="items.push({ id:items.length + 1, item: newItem})">
+            Save Item
+        </button>
+
+        <br>
+        <br>
+
+        <input type="checkbox" id="checkbox" v-model="checkbox">
+        <label for="checkbox">{{ checkbox }}</label>
+
+        <br>
+        <br>
+        <input type="radio" id="one" value="One" v-model="picked">
+        <label for="one">One</label>
+        <input type="radio" id="two" value="Two" v-model="picked">
+        <label for="two">Two</label>
+        <input type="radio" id="two" value="Three" v-model="picked">
+        <label for="three">Three</label>
+        <br>
+        <span>Picked: {{ picked }}</span>
+        <br>
+        <br>
+
+        <select v-model="selected">
+            <option disabled value="">Please select one</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <br>
+        <span>Selected: {{ selected }}</span>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vue-material"></script>
+
+    <script>
+        const shoppingList = Vue.createApp({
+            data() {
+                return {
+                    header: 'welcome to VueJs',
+                    newItem: '',
+                    checkbox: true,
+                    picked: '',
+                    selected: '',
+                    items: [
+                        { id: 1, item: 'party hats' },
+                        { id: 2, item: 'party hat' },
+                        { id: 3, item: 'party ha' },
+                        { id: 4, item: 'party h' },
+                    ]
+                }
+            }
+        }).mount('#shopping-list')
+    </script>
+
+</body>
+
+</html>
