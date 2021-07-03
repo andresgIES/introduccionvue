@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
     <title>Introduction to vue</title>
+    <link rel="stylesheet" href="main.css">
 </head>
+
 
 <body>
     <div id="shopping-list">
@@ -15,23 +17,37 @@
         <input type="text" v-model="header" placeholder="edit me">
         <ul>
 
-            <li v-for="item in items">
+            <li v-for="item in items" :class="[item.purchased ? 'purchased' : 'notpurchased']">
                 {{item.item}} with number: {{item.id}}
             </li>
         </ul>
 
-        <input type="text" v-model="newItem" placeholder="add item">
-        <button v-on:click="items.push({ id:items.length + 1, item: newItem})">
+        <input 
+        type="text" v-model="newItem" placeholder="add item"
+        v-on:keyup.enter="saveItem" v-bind:disabled="checkbox">
+        <button v-on:click="saveItem" v-bind:disabled="newItem.length === 0">
             Save Item
         </button>
 
         <br>
+
+        <input type="checkbox" id="purchase" v-model="purchase">
+        <label for="purchase"> purchase/not purchase</label>
+
         <br>
 
         <input type="checkbox" id="checkbox" v-model="checkbox">
-        <label for="checkbox">{{ checkbox }}</label>
+        <label for="checkbox"> disable/enable add new items</label>
 
         <br>
+
+        <div v-if="items.length >= 10">
+            <p>in that moment we have {{items.length}} items, we dont need more items </p>
+            <button v-on:click="popItem">
+                Delete last item
+            </button>
+        </div>
+
         <br>
         <input type="radio" id="one" value="One" v-model="picked">
         <label for="one">One</label>
@@ -50,12 +66,10 @@
             <option>B</option>
             <option>C</option>
         </select>
-        <br>
         <span>Selected: {{ selected }}</span>
     </div>
 
     <script src="https://unpkg.com/vue@next"></script>
-    <script src="https://unpkg.com/vue-material"></script>
 
     <script>
         const shoppingList = Vue.createApp({
@@ -63,15 +77,26 @@
                 return {
                     header: 'welcome to VueJs',
                     newItem: '',
-                    checkbox: true,
+                    checkbox: false,
                     picked: '',
                     selected: '',
+                    purchase: false,
                     items: [
-                        { id: 1, item: 'party hats' },
-                        { id: 2, item: 'party hat' },
-                        { id: 3, item: 'party ha' },
-                        { id: 4, item: 'party h' },
+                        { id: 1, item: 'party', purchased:true },
+                        { id: 2, item: 'party', purchased:true },
+                        { id: 3, item: 'party', purchased:false },
+                        { id: 4, item: 'party', purchased:true },
                     ]
+                }
+            },
+            methods:{
+                saveItem(){
+                    this.newItem.purchased = this.purchase;
+                    this.items.push({ id:this.items.length + 1, item: this.newItem, purchased: this.purchase});
+                    this.newItem = '';
+                },
+                popItem(){
+                    this.items.pop();
                 }
             }
         }).mount('#shopping-list')
