@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -25,9 +26,13 @@
         <input 
         type="text" v-model="newItem" placeholder="add item"
         v-on:keyup.enter="saveItem" v-bind:disabled="checkbox">
-        <button v-on:click="saveItem" v-bind:disabled="newItem.length === 0">
+        <button v-on:click="saveItem" v-bind:disabled="newItem.length === 0 || !partyItem">
             Save Item
         </button>
+
+        <br>
+
+        <label class="notpurchased" v-show="newItem.length > 0 && !partyItem"> Item should be "party" </label>
 
         <br>
 
@@ -97,6 +102,11 @@
                 },
                 popItem(){
                     this.items.pop();
+                }
+            },
+            computed:{
+                partyItem : function computeLenght(){
+                    return this.newItem === 'party';
                 }
             }
         }).mount('#shopping-list')
